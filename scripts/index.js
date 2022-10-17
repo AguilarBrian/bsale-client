@@ -22,7 +22,7 @@ const showProducts = (data) => {
     for (let product of data) {
         PRODUCTS_DIV.innerHTML += `
                     <div class="product" id="${product.id}">
-                        <img src="${product.url_image}" alt="${product.name}">
+                        <img src="${product.url_image ? product.url_image : 'https://shenandoahcountyva.us/bos/wp-content/uploads/sites/4/2018/01/picture-not-available-clipart-12.jpg'}" alt="${product.name}">
                         <h3>${product.name}</h3>
                         <p>$ ${product.price}</p>
                     </div>
@@ -49,26 +49,4 @@ const search = () => {
     }
 }
 
-SEARCH_INPUT.addEventListener('keyup', e => {
-    // saving the input value
-    search_term = e.target.value;
-
-    // re-displaying countries based on the new search_term
-    search();
-});
-
-
-
-// fetch(PRODUCTS_URL)
-//     .then(response => response.json())
-//     .then(data => {
-//         for (let product of data) {
-//             PRODUCTS_DIV.innerHTML += `
-//                         <div class="product" id="${product.id}">
-//                             <img src="${product.url_image}" alt="${product.name}">
-//                             <h3>${product.name}</h3>
-//                             <p>$ ${product.price}</p>
-//                         </div>
-//                     `
-//         }
-//     })
+SEARCH_INPUT.addEventListener('keyup', e => { search(); });
