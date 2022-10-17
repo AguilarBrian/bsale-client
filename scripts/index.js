@@ -7,30 +7,68 @@ const CATEGORY_URL = "https://bsale-challenge-api.herokuapp.com/api/v1/category/
 const TITLE = document.createElement("h1")
 TITLE.innerHTML = "BSale Challenge"
 
-const SEARCH = document.createElement("input")
-SEARCH.setAttribute("id", "search")
-SEARCH.setAttribute("type", "text")
-SEARCH.setAttribute("placeholder", "Search")
+const SEARCH_INPUT = document.createElement("input")
+SEARCH_INPUT.setAttribute("id", "search")
+SEARCH_INPUT.setAttribute("type", "text")
+SEARCH_INPUT.setAttribute("placeholder", "Search")
 
-const SEARCH_BUTTON = document.createElement("button")
-SEARCH_BUTTON.setAttribute("id", "searchButton")
-SEARCH_BUTTON.innerHTML = "Search"
 
-const PRODUCTS = document.createElement("div")
-PRODUCTS.setAttribute("id", "products")
+const PRODUCTS_DIV = document.createElement("div")
+PRODUCTS_DIV.setAttribute("id", "products")
 
-document.body.append(TITLE, SEARCH, SEARCH_BUTTON, PRODUCTS)
+document.body.append(TITLE, SEARCH_INPUT, PRODUCTS_DIV)
 
-fetch(PRODUCTS_URL)
-    .then(response => response.json())
-    .then(data => {
-        for (let product of data) {
-            PRODUCTS.innerHTML += `
-                        <div class="product" id="${product.id}">
-                            <img src="${product.url_image}" alt="${product.name}">
-                            <h3>${product.name}</h3>
-                            <p>$ ${product.price}</p>
-                        </div>
-                    `
-        }
-    })
+const showProducts = (data) => {
+    for (let product of data) {
+        PRODUCTS_DIV.innerHTML += `
+                    <div class="product" id="${product.id}">
+                        <img src="${product.url_image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>$ ${product.price}</p>
+                    </div>
+                `
+    }
+}
+
+const search = () => {
+    const searchString = document.getElementById("search").value
+    if (searchString.length > 0) {
+        fetch(PRODUCTS_SEARCH_URL + searchString)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                showProducts(data)
+            })
+    } else {
+        fetch(PRODUCTS_URL)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                showProducts(data)
+            })
+    }
+}
+
+SEARCH_INPUT.addEventListener('keyup', e => {
+    // saving the input value
+    search_term = e.target.value;
+
+    // re-displaying countries based on the new search_term
+    search();
+});
+
+
+
+// fetch(PRODUCTS_URL)
+//     .then(response => response.json())
+//     .then(data => {
+//         for (let product of data) {
+//             PRODUCTS_DIV.innerHTML += `
+//                         <div class="product" id="${product.id}">
+//                             <img src="${product.url_image}" alt="${product.name}">
+//                             <h3>${product.name}</h3>
+//                             <p>$ ${product.price}</p>
+//                         </div>
+//                     `
+//         }
+//     })
